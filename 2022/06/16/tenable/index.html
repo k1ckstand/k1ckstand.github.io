@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Don’t Panic123456789101112131415161718192021222324Even robots hate me.Jolly impressive anyway.I&amp;#x27;m a really terrific and great guy.Sorry, did I say something wrong?A terrible blight.OK, said Tri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CTF: Tenable">
+<meta property="og:url" content="http://example.com/2022/06/16/tenable/index.html">
+<meta property="og:site_name" content="k1ckstand">
+<meta property="og:description" content="Don’t Panic123456789101112131415161718192021222324Even robots hate me.Jolly impressive anyway.I&amp;#x27;m a really terrific and great guy.Sorry, did I say something wrong?A terrible blight.OK, said Tri">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-16T22:25:24.000Z">
+<meta property="article:modified_time" content="2022-07-27T15:27:31.408Z">
+<meta property="article:author" content="k1ckstand">
+<meta property="article:tag" content="scripting">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>CTF: Tenable</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    <!--  -->
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <!-- <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a> -->
+  <span id="menu">
+
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/07/20/brainfuck/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <!-- <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li> -->
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <!-- <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/06/16/tenable/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/06/16/tenable/&text=CTF: Tenable"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/06/16/tenable/&is_video=false&description=CTF: Tenable"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CTF: Tenable&body=Check out this article: http://example.com/2022/06/16/tenable/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/06/16/tenable/&name=CTF: Tenable&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/06/16/tenable/&t=CTF: Tenable"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul> -->
+
+    </div>
+    <!-- <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Don%E2%80%99t-Panic"><span class="toc-number">1.</span> <span class="toc-text">Don’t Panic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-Character-Frustration"><span class="toc-number">2.</span> <span class="toc-text">Object Character Frustration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Characters-of-Shakespeare%E2%80%99s-Plays"><span class="toc-number">3.</span> <span class="toc-text">Characters of Shakespeare’s Plays</span></a></li></ol>
+    </div> -->
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+
+
+    <header id="header">
+      <a href="/">
+      
+        
+          <div id="logo" style="background-image: url(/images/finn.png);"></div>
+        
+      
+        <div id="title">
+          <h1>k1ckstand</h1>
+        </div>
+      </a>
+      <div id="nav">
+        <ul>
+          <li class="icon">
+            <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x"></i></a>
+          </li>
+          <!--
+         --><li><a href="/">Home</a></li><!--
+       --><!--
+         --><li><a href="/archives/">Post</a></li><!--
+       --><!--
+         --><li><a href="/about/">About</a></li><!--
+       --><!--
+         --><li><a href="/search/">Search</a></li><!--
+       -->
+        </ul>
+      </div>
+    </header>
+    
+
+    <header>
+      
+    <h1 class="posttitle" itemprop="name headline">
+        CTF: Tenable
+    </h1>
+
+
+
+      <div class="meta">
+        <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span itemprop="name">k1ckstand</span>
+        </span>
+        
+    <div class="postdate">
+      
+        <time datetime="2022-06-16T22:25:24.000Z" itemprop="datePublished">2022-06-16</time>
+        
+      
+    </div>
+
+
+        
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/CTF/">CTF</a>
+    </div>
+
+
+        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/scripting/" rel="tag">scripting</a>
+    </div>
+
+
+      </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    
+
+<h2 id="Don’t-Panic"><a href="#Don’t-Panic" class="headerlink" title="Don’t Panic"></a>Don’t Panic</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">Even robots hate me.</span><br><span class="line">Jolly impressive anyway.</span><br><span class="line">I&#x27;m a really terrific and great guy.</span><br><span class="line">Sorry, did I say something wrong?</span><br><span class="line">A terrible blight.</span><br><span class="line">OK, said Tricia, I&#x27;m ready.</span><br><span class="line">How wonderfully, bubblingly, frothingly, burstingly true.</span><br><span class="line"></span><br><span class="line">&lt;... SNIP ...&gt;</span><br><span class="line"></span><br><span class="line">Chapter 17 Misery, dejection.</span><br><span class="line">Fake bottles set in fake concrete.</span><br><span class="line">Terrific, said Arthur.</span><br><span class="line">Is something wrong?</span><br><span class="line">This was hopeless.</span><br><span class="line">Strange, terrible things... terrible, terrible!</span><br><span class="line">It&#x27;s so bloody confusing.</span><br><span class="line">Yes, alright Number Two, welcome back and all that.</span><br><span class="line">Yes, she added thoughtfully, I&#x27;m sure I did.</span><br><span class="line">Defence stations, defence stations!</span><br><span class="line">He had to admit it was perfectly true.</span><br><span class="line">Share and Enjoy.</span><br><span class="line">But it is the story of that terrible stupid catastrophe and some of its consequences.</span><br><span class="line">Good everything, pretty much.</span><br></pre></td></tr></table></figure>
+
+<p>The name of the above file is  <code>5641444552.txt</code>. Translated from hex: <code>VADER</code></p>
+<p>Every sentence in the file has a positive or negative sentiment.  This can be determined programmatically with   <a target="_blank" rel="noopener" href="https://github.com/cjhutto/vaderSentiment">https://github.com/cjhutto/vaderSentiment</a>. There were a few lines that were somewhat undecided so I made 2 separate list and hashed out the results rather than manually guess.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> vaderSentiment.vaderSentiment <span class="keyword">import</span> SentimentIntensityAnalyzer</span><br><span class="line"></span><br><span class="line">sid_obj = SentimentIntensityAnalyzer()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;5641444552.txt&#x27;</span>, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    default_positive = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    default_negative = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> f.readlines():</span><br><span class="line">        sentiment_dict = sid_obj.polarity_scores(line.strip())</span><br><span class="line">        <span class="keyword">if</span> sentiment_dict[<span class="string">&#x27;compound&#x27;</span>] &gt; <span class="number">0</span>:</span><br><span class="line">            default_positive += <span class="string">&#x27;1&#x27;</span></span><br><span class="line">            default_negative += <span class="string">&#x27;1&#x27;</span></span><br><span class="line">        <span class="keyword">elif</span> sentiment_dict[<span class="string">&#x27;compound&#x27;</span>] &lt; <span class="number">0</span>:</span><br><span class="line">            default_positive += <span class="string">&#x27;0&#x27;</span></span><br><span class="line">            default_negative += <span class="string">&#x27;0&#x27;</span></span><br><span class="line">        <span class="keyword">else</span> :</span><br><span class="line">            default_positive += <span class="string">&#x27;1&#x27;</span></span><br><span class="line">            default_negative += <span class="string">&#x27;0&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#x27;</span>.join([<span class="built_in">chr</span>(<span class="built_in">int</span>(default_positive[x:x+<span class="number">8</span>], <span class="number">2</span>)) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(default_positive), <span class="number">8</span>)]))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;&#x27;</span>.join([<span class="built_in">chr</span>(<span class="built_in">int</span>(default_negative[x:x+<span class="number">8</span>], <span class="number">2</span>)) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(default_negative), <span class="number">8</span>)]))</span><br></pre></td></tr></table></figure>
+
+<p>default positive: <code>flig&#123;7h&lt;nks_v0r_4ll_th;_f35H&#125;</code><br>default negative: <code>flic&#123;7h&lt;nk3_f0_4ll_th;_f15H&#125;</code><br>Flag: <code>flag&#123;7h&lt;nks_f0r_4ll_th;_f15H&#125;</code> </p>
+<h2 id="Object-Character-Frustration"><a href="#Object-Character-Frustration" class="headerlink" title="Object Character Frustration"></a>Object Character Frustration</h2>
+
+<p>It’s a bit hard to tell but the yellow text is just a bunch of hex values.  To solve each value needs to be read individually and written to a file as bytes.  After having some initial difficulty with pytesseract I went with a manual approach of hashing every unique digit and creating a lookup table. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">im_sig = &#123;</span><br><span class="line">    <span class="string">&#x27;0&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;1&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;2&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;3&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;4&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;5&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;6&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;7&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;8&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;9&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;a&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;b&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;c&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;d&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;e&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;f&#x27;</span>: [],</span><br><span class="line">    <span class="string">&#x27;x&#x27;</span>: [] <span class="comment"># anything non hex goes here</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> os.listdir(<span class="string">&#x27;classifier&#x27;</span>):</span><br><span class="line">    key, value = file.split(<span class="string">&#x27;_&#x27;</span>)</span><br><span class="line">    value = value.split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">    im_sig[key].append(value)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> Image.<span class="built_in">open</span>(<span class="string">&#x27;challenge.png&#x27;</span>) <span class="keyword">as</span> im:</span><br><span class="line">    final_string = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    WIDTH, HEIGHT = im.size</span><br><span class="line">    h = <span class="number">0</span></span><br><span class="line">    <span class="keyword">while</span> h &lt; HEIGHT:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&#x27;line <span class="subst">&#123;h&#125;</span> of <span class="subst">&#123;HEIGHT&#125;</span>&#x27;</span>)</span><br><span class="line">        w = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> w &lt; WIDTH:</span><br><span class="line">            <span class="keyword">if</span> im.getpixel((w, h)) != (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>):</span><br><span class="line">                line = Image.Image.crop(im, (<span class="number">9</span>, h, WIDTH - <span class="number">5</span>, h + <span class="number">7</span>))</span><br><span class="line">                line_w, line_h = line.size</span><br><span class="line">                left = <span class="number">1</span></span><br><span class="line">                right = left + <span class="number">5</span></span><br><span class="line">                <span class="keyword">while</span> right &lt; line_w:</span><br><span class="line">                    digit  = Image.Image.crop(line, (left, <span class="number">0</span>, right, line_h))</span><br><span class="line">                    dight_md5 = hashlib.md5(digit.tobytes()).hexdigest()</span><br><span class="line">                    digit_found = <span class="literal">False</span></span><br><span class="line">                    <span class="keyword">for</span> key <span class="keyword">in</span> im_sig:</span><br><span class="line">                        <span class="keyword">if</span> dight_md5 <span class="keyword">in</span> im_sig[key]:</span><br><span class="line">                            final_string += key</span><br><span class="line">                            digit_found = <span class="literal">True</span></span><br><span class="line">                            <span class="keyword">break</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> digit_found:</span><br><span class="line">                        Image.Image.save(digit, <span class="string">&#x27;WHAT_AM_I.png&#x27;</span>)</span><br><span class="line">                        my_input = <span class="built_in">input</span>(<span class="string">&#x27;What is ./WHAT_AM_I.png: &#x27;</span>)</span><br><span class="line">                        im_sig[my_input.strip()].append(dight_md5)</span><br><span class="line">                        file_name = <span class="string">f&#x27;<span class="subst">&#123;my_input.strip()&#125;</span>_<span class="subst">&#123;<span class="built_in">str</span>(dight_md5)&#125;</span>.png&#x27;</span></span><br><span class="line">                        final_string += my_input.strip()</span><br><span class="line">                        shutil.move(<span class="string">&#x27;WHAT_AM_I.png&#x27;</span>, <span class="string">f&#x27;classifier/<span class="subst">&#123;my_input.strip()&#125;</span>_<span class="subst">&#123;<span class="built_in">str</span>(dight_md5)&#125;</span>.png&#x27;</span>)</span><br><span class="line">                    left += <span class="number">6</span></span><br><span class="line">                    right = left + <span class="number">5</span></span><br><span class="line">                h += <span class="number">8</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                w += <span class="number">1</span></span><br><span class="line">        h += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;flag.png&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>) <span class="keyword">as</span> f_out:</span><br><span class="line">    write_me = [x <span class="keyword">for</span> x <span class="keyword">in</span> final_string <span class="keyword">if</span> x != <span class="string">&#x27;x&#x27;</span>]</span><br><span class="line">    f_out.write(binascii.unhexlify(<span class="string">&#x27;&#x27;</span>.join(write_me)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;DONE&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Characters-of-Shakespeare’s-Plays"><a href="#Characters-of-Shakespeare’s-Plays" class="headerlink" title="Characters of Shakespeare’s Plays"></a>Characters of Shakespeare’s Plays</h2><p>This challenge provides a text file of Shakespeare.</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">INTRODUCTION</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">The book here included among The World&#x27;s Classics made its first</span><br><span class="line">appearance as an octavo volume of xxiv + 352 pages, with the title-page:</span><br><span class="line"></span><br><span class="line">Characters of Shakespeare&#x27;s Plays, By Wiliam Hzlitt. London:</span><br><span class="line">Printed by C. H. Reynell, 21 Piccadilly, 1817.</span><br><span class="line"></span><br><span class="line">William Hazlitt (1778-1830) came of an Irish Protestant stock, and of a</span><br><span class="line">branch of it transplanted in the reign of George I from the county of</span><br><span class="line">Antrim to Tipperary. His father migrated, at nineteen, to the University</span><br><span class="line">of Glasow where he was contemporary with Adam Smith), graduated in</span><br><span class="line">1761 or thereabouts, embraced the principles of the Unitarians, joined</span><br><span class="line">their ministry, and crossed over to England; being successively pastor</span><br><span class="line">at Wisbech in Cambridgeshire, at Marshfield in Gloucestershire, and at</span><br><span class="line">Maidstone. At Wisbech he married Grace Loftus, the daughter of a</span><br><span class="line">neighbouring farmer. Of the many children granted to them but three</span><br><span class="line">survived infancy. William, the youngest of these, was born in Mitre</span><br><span class="line">Lane, Maidstone, on April 10, 1778. From Maidstone the family moved in</span><br><span class="line">1780 to Bandon, Co. Cork; and from Bandon in 1783 to America, where Mr.</span><br><span class="line">Hazlitt preached before the new Assembly of the States-General of New</span><br><span class="line">Jersey, lectured at Philadelphia on the Evidences of Christianity,</span><br><span class="line">founded the First Unitarian Church at Boston, and declined a proffered</span><br><span class="line">diploma of D.D. In 1786-7 he returned to England and took up his abode</span><br><span class="line">at Wem, in Shropshire. His elder son, John, was now old enough to choose</span><br></pre></td></tr></table></figure>
+
+<p>After some quick googling I found the what looks to be the original source of the provided file at <code>https://www.gutenberg.org/cache/epub/5085/pg5085.txt</code>. A quick look at the difference starts to spell out the flag.</p>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># $1 = original file</span></span><br><span class="line"><span class="comment"># $2 = flag file</span></span><br><span class="line"></span><br><span class="line">hexdump -ve <span class="string">&#x27;1/1 &quot;%00x &quot; &quot;\n&quot;&#x27;</span> <span class="string">&quot;<span class="variable">$1</span>&quot;</span> &gt; /tmp/f1.hex</span><br><span class="line">hexdump -ve <span class="string">&#x27;1/1 &quot;%00x &quot; &quot;\n&quot;&#x27;</span> <span class="string">&quot;<span class="variable">$2</span>&quot;</span> &gt; /tmp/f2.hex</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> $(diff /tmp/f1.hex /tmp/f2.hex | grep ^<span class="string">&#x27;&gt;&#x27;</span> | sed <span class="string">&#x27;s/&gt; //g&#x27;</span> |  xxd -r -p)</span><br><span class="line"></span><br><span class="line"><span class="built_in">rm</span> /tmp/f1.hex</span><br><span class="line"><span class="built_in">rm</span> /tmp/f2.hex</span><br></pre></td></tr></table></figure>
+
+<p>Flag: <code>flag(It&#39;s not the notes you play, it&#39;s the notes you don&#39;t play)</code></p>
+
+  </div>
+</article>
+<!-- 
+ -->
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Post</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Don%E2%80%99t-Panic"><span class="toc-number">1.</span> <span class="toc-text">Don’t Panic</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Object-Character-Frustration"><span class="toc-number">2.</span> <span class="toc-text">Object Character Frustration</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Characters-of-Shakespeare%E2%80%99s-Plays"><span class="toc-number">3.</span> <span class="toc-text">Characters of Shakespeare’s Plays</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <!-- <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2022/06/16/tenable/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2022/06/16/tenable/&text=CTF: Tenable"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2022/06/16/tenable/&is_video=false&description=CTF: Tenable"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=CTF: Tenable&body=Check out this article: http://example.com/2022/06/16/tenable/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2022/06/16/tenable/&title=CTF: Tenable"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2022/06/16/tenable/&name=CTF: Tenable&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2022/06/16/tenable/&t=CTF: Tenable"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul> -->
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    k1ckstand
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Post</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
+
+
