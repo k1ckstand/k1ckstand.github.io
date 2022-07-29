@@ -319,8 +319,8 @@
 body h1,
 body .h1 {
   display: block;
-  margin-top: 3rem;
-  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
   color: #2bbc8a;
   letter-spacing: 0.01em;
   font-weight: 700;
@@ -333,7 +333,7 @@ body h2,
 body .h2 {
   position: relative;
   display: block;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   margin-bottom: 0.5rem;
   color: #eee;
   text-transform: none;
@@ -364,7 +364,7 @@ body h6 {
   margin-bottom: 0.5rem;
 }
 body hr {
-  border: 0.5px dashed #ccc;
+  border: 1px dashed #ccc;
   opacity: 0.5;
   margin: 0;
   margin-top: 20px;
@@ -1569,6 +1569,20 @@ article .content .caption {
 .highlight .code .emphasis {
   font-style: italic;
 }
+article.content h2:before {
+  position: relative;
+  color: #2bbc8a;
+  content: "## ";
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+article.content h3:before {
+  position: relative;
+  color: #2bbc8a;
+  content: "## ";
+  font-weight: bold;
+  font-size: 1.3rem;
+}
 pre {
   overflow-x: auto;
   padding: 10px 15px;
@@ -1580,16 +1594,12 @@ pre {
   line-height: 22px;
   -webkit-border-radius: 4px;
 }
-pre code {
-  display: block;
-  padding: 0;
-  border: none;
-}
 code {
-  padding: 0 5px;
+  padding: 0 10px;
   border: 1px dotted #908d8d;
   border-radius: 2px;
-  -webkit-border-radius: 2px;
+  -webkit-border-radius: 10px;
+  background: #3b3d42;
 }
 .highlight {
   overflow-x: auto;

