@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>web on Notes at Random</title>
+    <link>https://k1ckstand.com/tags/web/</link>
+    <description>Recent content in web on Notes at Random</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 08 Jun 2023 13:55:49 +0000</lastBuildDate><atom:link href="https://k1ckstand.com/tags/web/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HTB: Late</title>
+      <link>https://k1ckstand.com/late/</link>
+      <pubDate>Thu, 08 Jun 2023 13:55:49 +0000</pubDate>
+      
+      <guid>https://k1ckstand.com/late/</guid>
+      <description>Late is an easy machine that has a unique server-side template injection via the image ocr functionality provided by the site. Once you’re on the box there are two key findings. First is that the user has write permissions to a folder in the root $PATH. The second is that a script runs as root every time someone remotes into the box. The script in question uses several system commands that can be “tricked” into using our own commands by placing them closer to the front of $PATH.</description>
+    </item>
+    
+  </channel>
+</rss>
