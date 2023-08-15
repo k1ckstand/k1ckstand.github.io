@@ -1,0 +1,4 @@
+baseURL = 'https://k1ckstand.com'
+languageCode = 'en-us'
+title = 'Notes at Random'
+theme = 'PaperMod'
